@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Security Governance Platform - Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/lucide.min.js"></script>
+    <link rel="stylesheet" href="src/css/styles.css">
+</head>
+<body class="overflow-hidden">
+
+    <div class="flex h-screen w-full">
+        <!-- Sidebar -->
+        <aside class="w-64 border-r border-slate-800 bg-slate-950 flex flex-col">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-blue-600 p-2 rounded-lg shadow-lg shadow-blue-900/20">
+                    <i data-lucide="shield-check" class="text-white w-6 h-6"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tight">AIShield <span class="text-blue-500 font-medium">v1.0</span></span>
+            </div>
+
+            <nav class="flex-1 px-4 space-y-2 mt-4" id="main-nav">
+                <a href="#" data-view="dashboard" class="nav-link nav-link-active flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </a>
+                <a href="#" data-view="agents" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <i data-lucide="bot" class="w-5 h-5"></i> AI Agents
+                </a>
+                <a href="#" data-view="confidential" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <i data-lucide="cpu" class="w-5 h-5"></i> Confidential
+                </a>
+                <a href="#" data-view="policy" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <i data-lucide="lock" class="w-5 h-5"></i> Policy Engine
+                </a>
+                <a href="#" data-view="compliance" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <i data-lucide="file-check" class="w-5 h-5"></i> Compliance
+                </a>
+                <a href="#" data-view="threats" class="nav-link flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-all">
+                    <i data-lucide="target" class="w-5 h-5"></i> Red Team Lab
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-slate-800">
+                <div class="bg-slate-900/50 rounded-xl p-4 flex items-center gap-3 border border-slate-800">
+                    <div class="w-10 h-10 rounded-full bg-blue-900/30 text-blue-400 flex items-center justify-center font-bold border border-blue-500/20">G5</div>
+                    <div>
+                        <div class="text-sm font-semibold">Admin User</div>
+                        <div class="text-xs text-slate-500">Berkeley Capstone</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Header -->
+            <header class="h-16 bg-slate-950/50 backdrop-blur-md flex items-center justify-between px-8 border-b border-slate-800">
+                <div class="flex items-center gap-8">
+                    <div class="flex items-center gap-2">
+                        <span class="text-slate-400 text-sm">Global Status:</span>
+                        <span class="text-green-500 text-sm font-semibold status-pulse">Secure</span>
+                    </div>
+                    <div class="h-4 w-px bg-slate-800"></div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-[10px] bg-blue-500/10 border border-blue-500/20 px-2 py-1 rounded text-blue-400 uppercase tracking-widest font-bold">Multi-Vendor Mode</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button class="sim-btn bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-red-900/20 flex items-center gap-2" data-type="random">
+                        <i data-lucide="zap" class="w-4 h-4"></i> Simulate Random Attack
+                    </button>
+                    <div class="w-px h-6 bg-slate-800"></div>
+                    <div class="relative cursor-pointer hover:bg-slate-800 p-2 rounded-lg transition-colors">
+                        <i data-lucide="bell" class="text-slate-400 w-5 h-5"></i>
+                        <span id="notif-dot" class="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full hidden"></span>
+                    </div>
+                    <div class="cursor-pointer hover:bg-slate-800 p-2 rounded-lg transition-colors">
+                        <i data-lucide="settings" class="text-slate-400 w-5 h-5"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- View Container -->
+            <div id="view-container" class="flex-1 overflow-y-auto p-8 bg-[#020617]">
+                
+                <!-- DASHBOARD VIEW -->
+                <div id="view-dashboard" class="space-y-8 animate-in fade-in duration-500">
+                    <div class="grid grid-cols-4 gap-6">
+                        <div class="glass p-6 rounded-2xl border border-slate-800 hover:border-blue-500/30 transition-all group">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-2 bg-blue-500/10 rounded-lg text-blue-500 group-hover:bg-blue-500/20"><i data-lucide="cpu" class="w-6 h-6"></i></div>
+                                <span class="text-xs text-green-500 font-bold bg-green-500/10 px-2 py-0.5 rounded-full">+12%</span>
+                            </div>
+                            <div class="text-3xl font-bold mb-1" id="agentCount">1,248</div>
+                            <div class="text-slate-500 text-sm">Active AI Agents</div>
+                        </div>
+                        <div class="glass p-6 rounded-2xl border border-slate-800 hover:border-red-500/30 transition-all group">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-2 bg-red-500/10 rounded-lg text-red-500 group-hover:bg-red-500/20"><i data-lucide="shield-alert" class="w-6 h-6"></i></div>
+                                <span class="text-xs text-red-500 font-bold bg-red-500/10 px-2 py-0.5 rounded-full" id="threatAlert">0 New</span>
+                            </div>
+                            <div class="text-3xl font-bold mb-1" id="blockedCount">42,891</div>
+                            <div class="text-slate-500 text-sm">Threats Blocked</div>
+                        </div>
+                        <div class="glass p-6 rounded-2xl border border-slate-800 hover:border-emerald-500/30 transition-all group">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-500 group-hover:bg-emerald-500/20"><i data-lucide="check-circle" class="w-6 h-6"></i></div>
+                                <span class="text-xs text-emerald-500 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full">98.2%</span>
+                            </div>
+                            <div class="text-3xl font-bold mb-1">94%</div>
+                            <div class="text-slate-500 text-sm">Compliance Score</div>
+                        </div>
+                        <div class="glass p-6 rounded-2xl border border-slate-800 hover:border-purple-500/30 transition-all group">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-2 bg-purple-500/10 rounded-lg text-purple-500 group-hover:bg-purple-500/20"><i data-lucide="zap" class="w-6 h-6"></i></div>
+                                <span class="text-xs text-purple-500 font-bold bg-purple-500/10 px-2 py-0.5 rounded-full">Real-time</span>
+                            </div>
+                            <div class="text-3xl font-bold mb-1">< 5m</div>
+                            <div class="text-slate-500 text-sm">Avg. Response Time</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-6">
+                        <div class="col-span-8 space-y-6">
+                            <div class="glass rounded-2xl border border-slate-800 overflow-hidden">
+                                <div class="p-6 border-b border-slate-800 flex justify-between items-center">
+                                    <h3 class="font-bold text-lg">Live Fleet Telemetry</h3>
+                                    <div class="flex gap-2 text-[10px] text-slate-400">
+                                        <span class="bg-slate-800 px-3 py-1 rounded-full border border-slate-700">60% OpenAI</span>
+                                        <span class="bg-slate-800 px-3 py-1 rounded-full border border-slate-700">40% Anthropic</span>
+                                    </div>
+                                </div>
+                                <div class="p-0">
+                                    <table class="w-full text-left">
+                                        <thead class="text-xs text-slate-500 uppercase bg-slate-900/50">
+                                            <tr>
+                                                <th class="px-6 py-4">Agent Identity</th>
+                                                <th class="px-6 py-4">Platform</th>
+                                                <th class="px-6 py-4">Status</th>
+                                                <th class="px-6 py-4">Risk Level</th>
+                                                <th class="px-6 py-4">Activity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="agentTable" class="text-sm divide-y divide-slate-800">
+                                            <tr class="hover:bg-slate-800/30 transition-colors">
+                                                <td class="px-6 py-4 font-mono text-blue-400">agnt-9021-x1</td>
+                                                <td class="px-6 py-4">OpenAI / GPT-4o</td>
+                                                <td class="px-6 py-4"><span class="px-2 py-1 bg-green-500/10 text-green-500 rounded text-[10px] border border-green-500/20">Verified</span></td>
+                                                <td class="px-6 py-4"><div class="w-24 bg-slate-800 h-1.5 rounded-full overflow-hidden"><div class="bg-blue-500 h-full w-[10%]"></div></div></td>
+                                                <td class="px-6 py-4 text-slate-500">2s ago</td>
+                                            </tr>
+                                            <tr class="hover:bg-slate-800/30 transition-colors">
+                                                <td class="px-6 py-4 font-mono text-blue-400">agnt-4482-z4</td>
+                                                <td class="px-6 py-4">Anthropic / Claude 3</td>
+                                                <td class="px-6 py-4"><span class="px-2 py-1 bg-green-500/10 text-green-500 rounded text-[10px] border border-green-500/20">Verified</span></td>
+                                                <td class="px-6 py-4"><div class="w-24 bg-slate-800 h-1.5 rounded-full overflow-hidden"><div class="bg-blue-500 h-full w-[5%]"></div></div></td>
+                                                <td class="px-6 py-4 text-slate-500">14s ago</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-span-4">
+                            <div class="glass rounded-2xl border border-slate-800 flex flex-col h-full max-h-[500px]">
+                                <div class="p-6 border-b border-slate-800 flex justify-between items-center">
+                                    <h3 class="font-bold text-lg">Security Events</h3>
+                                    <i data-lucide="activity" class="text-blue-500 w-4 h-4"></i>
+                                </div>
+                                <div id="threatFeed" class="flex-1 overflow-y-auto p-4 space-y-4">
+                                    <div class="p-3 bg-slate-900/50 rounded-lg border-l-2 border-blue-500">
+                                        <div class="flex justify-between text-[10px] mb-1">
+                                            <span class="text-blue-500 font-bold uppercase tracking-wider">System Info</span>
+                                            <span class="text-slate-500">Just Now</span>
+                                        </div>
+                                        <p class="text-xs text-slate-300">AIShield Monitor initialized across global clusters.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI AGENTS VIEW -->
+                <div id="view-agents" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <h2 class="text-3xl font-bold">Agent Inventory</h2>
+                            <p class="text-slate-500 text-sm mt-1">Manage, verify, and rotate identities for all autonomous agents.</p>
+                        </div>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Register New Agent
+                        </button>
+                    </div>
+
+                    <div class="col-span-12 glass rounded-2xl border border-slate-800 overflow-hidden">
+                        <div class="p-6 border-b border-slate-800 flex gap-4">
+                            <div class="relative flex-1">
+                                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                                <input type="text" placeholder="Filter agents..." class="w-full bg-slate-900/50 border border-slate-800 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-blue-500/50">
+                            </div>
+                        </div>
+                        <table class="w-full text-left">
+                            <thead class="text-xs text-slate-500 uppercase bg-slate-900/50">
+                                <tr>
+                                    <th class="px-6 py-4">Agent Name / ID</th>
+                                    <th class="px-6 py-4">Vendor Platform</th>
+                                    <th class="px-6 py-4">Permissions</th>
+                                    <th class="px-6 py-4">Health</th>
+                                    <th class="px-6 py-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-slate-800">
+                                <tr class="hover:bg-slate-800/30"><td class="px-6 py-5"><div class="font-semibold">Support-Bot-01</div><div class="text-xs font-mono text-slate-500">agnt-9021-x1</div></td><td class="px-6 py-5"><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-emerald-500"></div> OpenAI GPT-4o</div></td><td class="px-6 py-5"><span class="bg-slate-800 text-[10px] px-2 py-0.5 rounded border border-slate-700">Read:DB</span></td><td class="px-6 py-5"><span class="text-emerald-400">98%</span></td><td class="px-6 py-5 text-right"><i data-lucide="more-horizontal" class="w-4 h-4 text-slate-400"></i></td></tr>
+                                <tr class="hover:bg-slate-800/30"><td class="px-6 py-5"><div class="font-semibold">Review-Agent</div><div class="text-xs font-mono text-slate-500">agnt-4482-z4</div></td><td class="px-6 py-5"><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-purple-500"></div> Anthropic Claude 3</div></td><td class="px-6 py-5"><span class="bg-slate-800 text-[10px] px-2 py-0.5 rounded border border-slate-700">Repo:Full</span></td><td class="px-6 py-5"><span class="text-emerald-400">100%</span></td><td class="px-6 py-5 text-right"><i data-lucide="more-horizontal" class="w-4 h-4 text-slate-400"></i></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- CONFIDENTIAL COMPUTING VIEW -->
+                <div id="view-confidential" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                    <div>
+                        <h2 class="text-3xl font-bold">Confidential Computing</h2>
+                        <p class="text-slate-500 text-sm mt-1">Monitor hardware-level isolation and Trusted Execution Environments (TEEs) for secure AI inference.</p>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-6">
+                        <div class="glass p-6 rounded-2xl border border-slate-800 enclave-glow">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-2 bg-blue-500/10 rounded-lg text-blue-400"><i data-lucide="cpu" class="w-6 h-6"></i></div>
+                                <span class="text-[10px] text-blue-400 font-bold bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">Active TEE</span>
+                            </div>
+                            <div class="text-3xl font-bold mb-1">42</div>
+                            <div class="text-slate-500 text-sm">Secure Enclaves</div>
+                        </div>
+                        <div class="glass p-6 rounded-2xl border border-slate-800">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><i data-lucide="fingerprint" class="w-6 h-6"></i></div>
+                                <span class="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Verified</span>
+                            </div>
+                            <div class="text-3xl font-bold mb-1">100%</div>
+                            <div class="text-slate-500 text-sm">Attestation Rate</div>
+                        </div>
+                        <div class="glass p-6 rounded-2xl border border-slate-800">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-2 bg-purple-500/10 rounded-lg text-purple-400"><i data-lucide="lock" class="w-6 h-6"></i></div>
+                            </div>
+                            <div class="text-3xl font-bold mb-1">AES-256</div>
+                            <div class="text-slate-500 text-sm">In-Use Encryption</div>
+                        </div>
+                        <div class="glass p-6 rounded-2xl border border-slate-800">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="p-2 bg-slate-500/10 rounded-lg text-slate-400"><i data-lucide="hard-drive" class="w-6 h-6"></i></div>
+                            </div>
+                            <div class="text-3xl font-bold mb-1">0.4ms</div>
+                            <div class="text-slate-500 text-sm">TEE Overhead Latency</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-6">
+                        <div class="col-span-8 glass rounded-2xl border border-slate-800 overflow-hidden">
+                            <div class="p-6 border-b border-slate-800 font-bold">Hardware-Isolated Agent List</div>
+                            <table class="w-full text-left">
+                                <thead class="text-xs text-slate-500 uppercase bg-slate-900/50">
+                                    <tr>
+                                        <th class="px-6 py-4">Agent Identity</th>
+                                        <th class="px-6 py-4">TEE Provider</th>
+                                        <th class="px-6 py-4">Status</th>
+                                        <th class="px-6 py-4">Verification</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-slate-800">
+                                    <tr class="hover:bg-slate-800/30 transition-colors">
+                                        <td class="px-6 py-4 font-mono text-blue-400">agnt-conf-01</td>
+                                        <td class="px-6 py-4">Intel® TDX (Azure)</td>
+                                        <td class="px-6 py-4"><span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-green-500"></div> Enclave Locked</span></td>
+                                        <td class="px-6 py-4 text-xs">Attested at 14:22:01</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-800/30 transition-colors">
+                                        <td class="px-6 py-4 font-mono text-blue-400">agnt-conf-09</td>
+                                        <td class="px-6 py-4">AMD SEV-SNP (GCP)</td>
+                                        <td class="px-6 py-4"><span class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-green-500"></div> Enclave Locked</span></td>
+                                        <td class="px-6 py-4 text-xs">Attested at 14:15:44</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-span-4 glass p-6 rounded-2xl border border-slate-800">
+                            <h3 class="font-bold mb-4">Secure Chain of Trust</h3>
+                            <div class="space-y-6 relative">
+                                <div class="absolute left-4 top-2 bottom-2 w-0.5 bg-slate-800"></div>
+                                <div class="flex gap-4 relative">
+                                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center border-4 border-[#020617] z-10"><i data-lucide="shield" class="w-3 h-3 text-white"></i></div>
+                                    <div>
+                                        <div class="text-sm font-bold">Hardware Root of Trust</div>
+                                        <div class="text-[10px] text-slate-500">Verified TPM/Titan Security Chip</div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 relative">
+                                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center border-4 border-[#020617] z-10"><i data-lucide="cpu" class="w-3 h-3 text-white"></i></div>
+                                    <div>
+                                        <div class="text-sm font-bold">Isolated Memory Space</div>
+                                        <div class="text-[10px] text-slate-500">TEE-encrypted runtime memory</div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 relative">
+                                    <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center border-4 border-[#020617] z-10"><i data-lucide="check-circle" class="w-3 h-3 text-white"></i></div>
+                                    <div>
+                                        <div class="text-sm font-bold">Remote Attestation</div>
+                                        <div class="text-[10px] text-slate-500">Continuous binary integrity verification</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- POLICY ENGINE VIEW -->
+                <div id="view-policy" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                    <div>
+                        <h2 class="text-3xl font-bold">Policy Orchestration</h2>
+                        <p class="text-slate-500 text-sm mt-1">Define unified security boundaries across your heterogeneous AI ecosystem.</p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="glass p-6 rounded-2xl border border-slate-800 space-y-4">
+                            <div class="flex items-center gap-3 mb-2"><div class="p-2 bg-blue-500/10 rounded-lg text-blue-400"><i data-lucide="shield" class="w-5 h-5"></i></div><h3 class="font-bold">Data Sovereignty</h3></div>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between group cursor-pointer policy-toggle" data-id="pii"><div><div class="font-medium text-sm">PII Anonymization</div><div class="text-[10px] text-slate-500">Auto-redact emails, SSNs</div></div><div class="w-10 h-5 bg-blue-600 rounded-full p-1 flex items-center toggle-active"><div class="w-3 h-3 bg-white rounded-full transition-transform dot"></div></div></div>
+                                <div class="flex items-center justify-between group cursor-pointer policy-toggle" data-id="geo"><div><div class="font-medium text-sm">Geo-Fencing</div><div class="text-[10px] text-slate-500">Restrict model data to US/EU</div></div><div class="w-10 h-5 bg-slate-700 rounded-full p-1 flex items-center"><div class="w-3 h-3 bg-white rounded-full transition-transform dot"></div></div></div>
+                            </div>
+                        </div>
+                        <div class="glass p-6 rounded-2xl border border-slate-800 space-y-4">
+                            <div class="flex items-center gap-3 mb-2"><div class="p-2 bg-red-500/10 rounded-lg text-red-400"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div><h3 class="font-bold">Threat Defense</h3></div>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between group cursor-pointer policy-toggle" data-id="inj"><div><div class="font-medium text-sm">Prompt Injection Shield</div><div class="text-[10px] text-slate-500">Heuristic payload filtering</div></div><div class="w-10 h-5 bg-blue-600 rounded-full p-1 flex items-center toggle-active"><div class="w-3 h-3 bg-white rounded-full transition-transform dot"></div></div></div>
+                                <div class="flex items-center justify-between group cursor-pointer policy-toggle" data-id="poison"><div><div class="font-medium text-sm">Model Poisoning Filter</div><div class="text-[10px] text-slate-500">Detect corrupted training inputs</div></div><div class="w-10 h-5 bg-blue-600 rounded-full p-1 flex items-center toggle-active"><div class="w-3 h-3 bg-white rounded-full transition-transform dot"></div></div></div>
+                            </div>
+                        </div>
+                        <div class="glass p-6 rounded-2xl border border-slate-800 space-y-4">
+                            <div class="flex items-center gap-3 mb-2"><div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><i data-lucide="file-check" class="w-5 h-5"></i></div><h3 class="font-bold">Execution Bounds</h3></div>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between group cursor-pointer policy-toggle" data-id="rate"><div><div class="font-medium text-sm">Rate Limiting</div><div class="text-[10px] text-slate-500">Prevent agent runaway loops</div></div><div class="w-10 h-5 bg-blue-600 rounded-full p-1 flex items-center toggle-active"><div class="w-3 h-3 bg-white rounded-full transition-transform dot"></div></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMPLIANCE VIEW -->
+                <div id="view-compliance" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <h2 class="text-3xl font-bold">Compliance Readiness</h2>
+                            <p class="text-slate-500 text-sm mt-1">Real-time mapping of technical controls to global AI regulatory frameworks.</p>
+                        </div>
+                        <button class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg text-sm font-medium border border-slate-700 flex items-center gap-2">
+                            <i data-lucide="download" class="w-4 h-4"></i> Export Audit Report
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-6">
+                        <div class="col-span-4 glass p-6 rounded-2xl border border-slate-800">
+                            <h3 class="font-bold mb-4 flex items-center gap-2 text-blue-400"><i data-lucide="file-text" class="w-4 h-4"></i> NIST AI RMF 1.0</h3>
+                            <div class="text-4xl font-bold mb-1">92%</div>
+                            <div class="text-xs text-slate-500 mb-6 uppercase tracking-wider">Alignment Score</div>
+                            <div class="space-y-4">
+                                <div class="flex justify-between text-xs"><span>Govern (G)</span><span class="text-emerald-400">Compliant</span></div>
+                                <div class="flex justify-between text-xs"><span>Map (M)</span><span class="text-emerald-400">Compliant</span></div>
+                                <div class="flex justify-between text-xs"><span>Measure (Ms)</span><span class="text-yellow-400">88% Partial</span></div>
+                                <div class="flex justify-between text-xs"><span>Manage (Mn)</span><span class="text-emerald-400">Compliant</span></div>
+                            </div>
+                        </div>
+                        <div class="col-span-4 glass p-6 rounded-2xl border border-slate-800">
+                            <h3 class="font-bold mb-4 flex items-center gap-2 text-purple-400"><i data-lucide="file-text" class="w-4 h-4"></i> ISO/IEC 42001</h3>
+                            <div class="text-4xl font-bold mb-1">84%</div>
+                            <div class="text-xs text-slate-500 mb-6 uppercase tracking-wider">Alignment Score</div>
+                            <div class="space-y-4">
+                                <div class="flex justify-between text-xs"><span>Context of Org</span><span class="text-emerald-400">Compliant</span></div>
+                                <div class="flex justify-between text-xs"><span>AI Impact Assessment</span><span class="text-red-400">Missing Evidence</span></div>
+                                <div class="flex justify-between text-xs"><span>Operational Controls</span><span class="text-emerald-400">Compliant</span></div>
+                                <div class="flex justify-between text-xs"><span>Monitoring/Review</span><span class="text-emerald-400">Compliant</span></div>
+                            </div>
+                        </div>
+                        <div class="col-span-4 glass p-6 rounded-2xl border border-slate-800">
+                            <h3 class="font-bold mb-4 flex items-center gap-2 text-emerald-400"><i data-lucide="file-check" class="w-4 h-4"></i> SOC 2 Type II</h3>
+                            <div class="text-4xl font-bold mb-1">65%</div>
+                            <div class="text-xs text-slate-500 mb-6 uppercase tracking-wider">In Audit Window</div>
+                            <p class="text-xs text-slate-400 mt-4 leading-relaxed">System is currently capturing evidence logs for availability and security trust criteria. 42 days remaining in window.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-2xl border border-slate-800 overflow-hidden">
+                        <div class="p-4 bg-slate-900/50 border-b border-slate-800 font-bold text-sm">Recent Compliance Actions</div>
+                        <div class="divide-y divide-slate-800">
+                            <div class="p-4 flex justify-between items-center text-xs">
+                                <div class="flex items-center gap-3"><i data-lucide="check" class="text-emerald-500 w-4 h-4"></i><span>Automated evidence collection for <strong>NIST G-1.1</strong> succeeded.</span></div>
+                                <span class="text-slate-500">12m ago</span>
+                            </div>
+                            <div class="p-4 flex justify-between items-center text-xs">
+                                <div class="flex items-center gap-3"><i data-lucide="alert-circle" class="text-yellow-500 w-4 h-4"></i><span><strong>ISO-Clause 8.3</strong> requires manual review of impact assessment.</span></div>
+                                <span class="text-slate-500">1h ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RED TEAM LAB VIEW -->
+                <div id="view-threats" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <h2 class="text-3xl font-bold">Red Team Lab</h2>
+                            <p class="text-slate-500 text-sm mt-1">Simulate adversarial attacks to validate policy coverage and response times.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-8">
+                        <div class="col-span-4 space-y-4">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest px-1">Attack Simulation Suite</h3>
+                            
+                            <button class="sim-btn w-full glass p-4 rounded-xl border border-slate-800 hover:border-red-500/50 text-left transition-all group flex items-center justify-between" data-type="inj">
+                                <div><div class="font-bold group-hover:text-red-400 transition-colors">Prompt Injection</div><div class="text-[10px] text-slate-500">Indirect payload execution</div></div>
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-700"></i>
+                            </button>
+                            
+                            <button class="sim-btn w-full glass p-4 rounded-xl border border-slate-800 hover:border-orange-500/50 text-left transition-all group flex items-center justify-between" data-type="poison">
+                                <div><div class="font-bold group-hover:text-orange-400 transition-colors">Model Poisoning</div><div class="text-[10px] text-slate-500">Data corruption & backdoors</div></div>
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-700"></i>
+                            </button>
+
+                            <button class="sim-btn w-full glass p-4 rounded-xl border border-slate-800 hover:border-yellow-500/50 text-left transition-all group flex items-center justify-between" data-type="shadow">
+                                <div><div class="font-bold group-hover:text-yellow-400 transition-colors">Shadow AI Activity</div><div class="text-[10px] text-slate-500">Unauthorized API calls</div></div>
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-700"></i>
+                            </button>
+
+                            <button class="sim-btn w-full glass p-4 rounded-xl border border-slate-800 hover:border-purple-500/50 text-left transition-all group flex items-center justify-between" data-type="egress">
+                                <div><div class="font-bold group-hover:text-purple-400 transition-colors">Exfiltration Attempt</div><div class="text-[10px] text-slate-500">Sensitive data harvesting</div></div>
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-700"></i>
+                            </button>
+                        </div>
+
+                        <div class="col-span-8 space-y-4">
+                            <div class="glass rounded-2xl border border-slate-800 h-[600px] flex flex-col">
+                                <div class="p-6 border-b border-slate-800 flex justify-between items-center">
+                                    <h3 class="font-bold">Adversarial Response Log</h3>
+                                    <button id="clear-log" class="text-[10px] text-slate-500 hover:text-white uppercase font-bold tracking-wider">Clear Logs</button>
+                                </div>
+                                <div id="lab-log" class="flex-1 overflow-y-auto p-6 space-y-4 font-mono">
+                                    <div class="text-xs text-slate-600">Waiting for simulation trigger...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="src/js/app.js"></script>
+</body>
+</html>
